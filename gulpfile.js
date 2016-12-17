@@ -4,11 +4,17 @@ const gnf = require('gulp-npm-files');
 const runSequence = require('run-sequence');
 const rimraf = require('rimraf');
 
-const PUBLIC_DIRECTORY_PATH = './public';
+const PATH = {
+  DIRECTORY: {
+    SRC: 'src',
+    ASSETS: 'assets',
+    PUBLIC: 'public'
+  }
+}
 
 gulp.task('webserver', () => {
 
-  gulp.src(PUBLIC_DIRECTORY_PATH)
+  gulp.src(`${PATH.DIRECTORY.PUBLIC}`)
     .pipe(webServer({
       host: '0.0.0.0',
       port: 8080,
@@ -25,14 +31,15 @@ gulp.task('build', () => {
     [
       'copyIndexFile',
       'copyProjectSource',
-      'copyNpmDependenciesOnly'
+      'copyNpmDependenciesOnly',
+      'copyAssetsFiles'
     ]
   );
 });
 
 gulp.task('clean', (callback) => {
   console.log('clean');
-  return rimraf(PUBLIC_DIRECTORY_PATH, callback);
+  return rimraf(`./${PATH.DIRECTORY.PUBLIC}`, callback);
 });
 
 gulp.task('copyIndexFile', () => {
@@ -43,7 +50,7 @@ gulp.task('copyIndexFile', () => {
       'index.js'
     ])
     .pipe(
-      gulp.dest(PUBLIC_DIRECTORY_PATH)
+      gulp.dest(`./${PATH.DIRECTORY.PUBLIC}`)
     );
 });
 
@@ -51,12 +58,26 @@ gulp.task('copyProjectSource', () => {
   console.log('copyProjectSource');
   return gulp
     .src([
-      'src/**/*'
+      `./${PATH.DIRECTORY.SRC}/**/*`
     ], {
-      base: 'src'
+      base: `./${PATH.DIRECTORY.SRC }`
     })
     .pipe(
-      gulp.dest(PUBLIC_DIRECTORY_PATH)
+      gulp.dest(`./${PATH.DIRECTORY.PUBLIC}`)
+    );
+});
+
+
+gulp.task('copyAssetsFiles', () => {
+  console.log('copyAssetsFiles');
+  return gulp
+    .src([
+      `./${PATH.DIRECTORY.ASSETS}/**/*`
+    ], {
+      base: `./${PATH.DIRECTORY.ASSETS}`
+    })
+    .pipe(
+      gulp.dest(`${PATH.DIRECTORY.PUBLIC}/${PATH.DIRECTORY.ASSETS}`)
     );
 });
 
@@ -67,6 +88,6 @@ gulp.task('copyNpmDependenciesOnly', () => {
       base: './'
     })
     .pipe(
-      gulp.dest(PUBLIC_DIRECTORY_PATH)
+      gulp.dest(`${PATH.DIRECTORY.PUBLIC}`)
     );
 });

@@ -1,4 +1,4 @@
-APP.controller('PageController', [
+app.controller('PageController', [
   '$scope',
   function($scope) {
     ons.ready(function() {
