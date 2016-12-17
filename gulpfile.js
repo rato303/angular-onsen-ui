@@ -4,7 +4,7 @@ const gnf = require('gulp-npm-files');
 const runSequence = require('run-sequence');
 const rimraf = require('rimraf');
 
-const PUBLIC_DIRECTORY_PATH = 'public';
+const PUBLIC_DIRECTORY_PATH = './public';
 
 gulp.task('webserver', () => {
 
